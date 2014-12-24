@@ -1,6 +1,9 @@
 Ansible Role: Prezto
 ####################
 
+.. image:: https://travis-ci.org/loliee/ansible-prezto.svg?branch=master
+    :target: https://travis-ci.org/loliee/ansible-prezto
+
 Setup prezto zsh framework.
 
 - `zsh documentation <http://www.zsh.org/>`_
@@ -36,9 +39,11 @@ Unset by default, dictionary should defined like this:
 **Options**
 
 +------------------+-----------+--------------------------------------------------+
-| parameter        | type      | Comments                                         |
+| Option           | Type      | Comments                                         |
 +==================+===========+==================================================+
-| prezto_zpreztorc | text      | Lines to append to ~/.zpreztorc opts, modules... |
+| file_zpreztorc   | text      | Lines to append to ~/.zpreztorc opts, modules... |
++------------------+-----------+--------------------------------------------------+
+| prezto_editor    | string    | vi or emacs                                      |
 +------------------+-----------+--------------------------------------------------+
 
 `defaults`
@@ -46,21 +51,13 @@ Unset by default, dictionary should defined like this:
 
 Check **defaults/main.yml**
 
-+------------------+-----------+--------------------------------------------------+
-| parameter        | type      | Comments                                         |
-+==================+===========+==================================================+
-| prezto_source    | string    | Should not be modified, source prezto            |
-+------------------+-----------+--------------------------------------------------+
-| prezto_repo_url  | string    | Defaults http://github.com/loliee/prezto.git     |
-+------------------+-----------+--------------------------------------------------+
-
 
 Example Playbook
 ================
 
 The following playbook will install prezto for root user.
 
-.. code::
+.. code:: yaml
 
     # ./tests/main.yml
 
@@ -91,3 +88,8 @@ Run test, make sure ansible-zsh and ansible-prezto are in your role path.
 .. code:: bash
 
   sudo ansible-playbook -i ./tests/inventory ./tests/main.yml --connection=local
+
+Licence
+=======
+
+MIT ©  `Maxime Loliée <http://loliee.com/>`_

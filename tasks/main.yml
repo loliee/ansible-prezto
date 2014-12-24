@@ -32,10 +32,12 @@
     state=present
   with_dict: prezto_users_config
 
-- name: Update .zshrc
+- name: Add line for sourcing prezto in .zshrc.
   lineinfile:
     dest=~{{ item.key }}/.zshrc
-    line="{{ prezto_source }}"
+    line="\n# Source prezto \n{{ prezto_source }}"
+    insertafter="# File managed by ansible, should not be modified."
+    regexp="zprezto/init"
     state=present
   with_dict: prezto_users_config
 

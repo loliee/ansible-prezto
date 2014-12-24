@@ -1,0 +1,10 @@
+# File managed by ansible, should not be modified.
+
+
+{% for username, options in prezto_users_config.iteritems() %}
+{% if username == item.key %}
+
+{{ options.file_zpreztorc }}
+
+{% endif %}
+{% endfor %}

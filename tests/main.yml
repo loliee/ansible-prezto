@@ -1,0 +1,83 @@
+---
+# Test playbook: prezto install
+
+- hosts: localhost
+  remote_user: root
+  vars:
+    prezto_users_config:
+      root:
+        file_zpreztorc: |
+          # Set up prezto
+          zstyle ':prezto:*:*' color 'yes'
+          zstyle ':prezto:load' pmodule \
+            'environment' \
+            'terminal' \
+            'editor' \
+            'history' \
+            'directory' \
+            'spectrum' \
+            'utility' \
+            'completion' \
+            'prompt'\
+
+          zstyle ':prezto:module:prompt' theme 'mlpure'
+
+  roles:
+    - ansible-prezto
+
+  tasks:
+    - name: Check if zshrc exist just ls...
+      shell: ls ~{{ item.key }}/.zshrc
+      with_dict: prezto_users_config
+      register: ls_result
+      failed_when: ls_result.rc != 0
+      always_run: True
+
+    - name: Check if zlogin exist just ls...
+      shell: ls ~{{ item.key }}/.zlogin
+      with_dict: prezto_users_config
+      register: ls_result
+      failed_when: ls_result.rc != 0
+      always_run: True
+
+    - name: Check if zlogout exist just ls...
+      shell: ls ~{{ item.key }}/.zlogout
+      with_dict: prezto_users_config
+      register: ls_result
+      failed_when: ls_result.rc != 0
+      always_run: True
+
+    - name: Check if zpreztorc exist just ls...
+      shell: ls ~{{ item.key }}/.zpreztorc
+      with_dict: prezto_users_config
+      register: ls_result
+      failed_when: ls_result.rc != 0
+      always_run: True
+
+    - name: Check if zprofile exist just ls..
+      shell: ls ~{{ item.key }}/.zprofile
+      with_dict: prezto_users_config
+      register: ls_result
+      failed_when: ls_result.rc != 0
+      always_run: True
+
+    - name: Check if zshenv exist just ls..
+      shell: ls ~{{ item.key }}/.zshenv
+      with_dict: prezto_users_config
+      register: ls_result
+      failed_when: ls_result.rc != 0
+      always_run: True
+
+    - name: Check if linit lines was correctly appended in .zshrc.
+      shell: grep "zprezto/init.zsh" ~{{ item.key }}/.zshrc
+      with_dict: prezto_users_config
+      register: grep_result
+      failed_when: grep_result.rc != 0
+      always_run: True
+
+    - name: Check if linit lines was correctly appended in .zshrc.
+      shell: grep "zstyle ':prezto:module:prompt' theme 'mlpure'" ~{{ item.key }}/.zpreztorc
+      with_dict: prezto_users_config
+      register: grep_result
+      failed_when: grep_result.rc != 0
+      always_run: True

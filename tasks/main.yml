@@ -1,82 +1,85 @@
 ---
 
-- fail: msg="You must define prezto_users_config dict in your playbook !"
+- fail: msg="You must define __users__ as a dictionary in your playbook !"
   when: >
-   prezto_users_config is not defined or
-   (prezto_users_config is defined and prezto_users_config is not mapping)
+   __users__ is not defined or
+   (__users__ is defined and __users__ is not mapping)
 
-- name: Install prezto from git
+- name: Install prezto from git.
   git: repo={{ prezto_repo_url }}
        dest=~{{ item.key }}/.zprezto/
        track_submodules=yes
-  with_dict: prezto_users_config
+       force=yes
+       update=no
+  with_dict: __users__ | default({})
+  when: >
+      item.value.has_key('prezto_install') and item.value.prezto_install
 
-- name: Set to user zprezto ownership
+- name: Set permissions on ~/.zprezto.
   file:
     mode=0755
     owner={{ item.key }}
     path=~{{ item.key }}/.zprezto/
-  with_dict: prezto_users_config
+  with_dict: __users__ | default({})
+  when: >
+    item.value.has_key('prezto_install') and item.value.prezto_install
 
-- name: Check if ~/.zshrc exists
-  file:
-    path=~{{ item.key }}/.zshrc
-    state=touch
-  with_dict: prezto_users_config
-
-- name: Update .zshrc
-  lineinfile:
-    dest=~{{ item.key }}/.zshrc
-    line="# File managed by ansible, should not be modified."
-    insertbefore=BOF
-    state=present
-  with_dict: prezto_users_config
-
-- name: Add line for sourcing prezto in .zshrc.
+- name: Ensure prezto sourcing in ~/.zshrc.
   lineinfile:
     dest=~{{ item.key }}/.zshrc
     line="\n# Source prezto \n{{ prezto_source }}"
-    insertafter="# File managed by ansible, should not be modified."
-    regexp="zprezto/init"
+    regexp="zprezto/init.zsh"
     state=present
-  with_dict: prezto_users_config
+  with_dict: __users__ | default({})
+  when: >
+    item.value.has_key('prezto_install') and item.value.prezto_install
 
-- name: Set up zlogin
+- name: Set up zlogin.
   template:
     mode=0744
     owner={{ item.key }}
     src=zlogin.j2
     dest=~{{ item.key }}/.zlogin
-  with_dict: prezto_users_config
+  with_dict: __users__ | default({})
+  when: >
+    item.value.has_key('prezto_install') and item.value.prezto_install
 
-- name: Set up zlogout
+- name: Set up zlogout.
   template:
     mode=0744
     owner={{ item.key }}
     src=zlogout.j2
     dest=~{{ item.key }}/.zlogout
-  with_dict: prezto_users_config
+  with_dict: __users__ | default({})
+  when: >
+    item.value.has_key('prezto_install') and item.value.prezto_install
 
-- name: Set up zprofile
+- name: Set up zprofile.
   template:
     mode=0744
     owner={{ item.key }}
     src=zprofile.j2
     dest=~{{ item.key }}/.zprofile
-  with_dict: prezto_users_config
+  with_dict: __users__ | default({})
+  when: >
+    item.value.has_key('prezto_install') and item.value.prezto_install
 
-- name: Set up zpreztorc
+- name: Set up zpreztorc.
   template:
     mode=0744
     owner={{ item.key }}
     src=zpreztorc.j2
     dest=~{{ item.key }}/.zpreztorc
-  with_dict: prezto_users_config
+  with_dict: __users__ | default({})
+  when: >
+    item.value.has_key('prezto_install') and item.value.prezto_install
 
-- name: Set up zshenv
+- name: Set up zshenv.
   template:
     mode=0744
     owner={{ item.key }}
     src=zshenv.j2
     dest=~{{ item.key }}/.zshenv
-  with_dict: prezto_users_config
+  with_dict: __users__ | default({})
+  when: >
+    item.value.has_key('prezto_install') and item.value.prezto_install

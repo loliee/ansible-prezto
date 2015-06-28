@@ -2,7 +2,7 @@
 
 galaxy_info:
   author: Maxime Loliée
-  description: Zsh framework
+  description: Install prezto for zsh.
   license: "license (MIT)"
   min_ansible_version: 1.8
   platforms:
@@ -16,6 +16,12 @@ galaxy_info:
   - name: Ubuntu
     versions:
     - all
+  - name: Darwin
+    versions:
+    - all
+  categories:
+    - system
 
 dependencies:
+- { role: ansible-git }
 - { role: ansible-zsh }

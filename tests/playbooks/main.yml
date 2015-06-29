@@ -1,0 +1,11 @@
+---
+# Test playbook: prezto install
+
+- hosts: localhost
+  remote_user: root
+  vars:
+    __users__:
+      mtester:
+        prezto_install: Yes
+  roles:
+    - ansible-prezto

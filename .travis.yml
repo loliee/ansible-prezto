@@ -9,6 +9,7 @@ before_install:
 install:
   - pip install ansible
   - "{ echo '[defaults]'; echo 'roles_path = ../'; } >> ansible.cfg"
+  - ansible-galaxy install -r requirements.yml -p ../ --force
 
 script:
   - ansible-playbook -i ./tests/inventory ./tests/main.yml --syntax-check

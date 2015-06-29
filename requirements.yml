@@ -1,0 +1,9 @@
+---
+
+- src: loliee.zsh
+  name: ansible-zsh
+  path: ../
+
+- src: loliee.git
+  name: ansible-git
+  path: ../

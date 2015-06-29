@@ -1,4 +1,4 @@
-# File managed by ansible, should not be modified.
+# {{ ansible_managed }}
 #
 # Executes commands at login pre-zshrc.
 #
@@ -11,7 +11,7 @@ if [[ "$OSTYPE" == darwin* ]]; then
 fi
 
 
-{% for username, options in prezto_users_config.iteritems() %}
+{% for username, options in __users__.iteritems() %}
 {% if username == item.key and options.has_key('prezto_editor')%}
 #
 # Editors

@@ -1,10 +1,17 @@
-# File managed by ansible, should not be modified.
+# {{ ansible_managed }}
 
-
-{% for username, options in prezto_users_config.iteritems() %}
+{% for username, options in __users__.iteritems() %}
 {% if username == item.key %}
 
-{{ options.file_zpreztorc }}
+    {%- if options.has_key('options.prezto_zpreztorc_content') %}
+
+{{ options.prezto_zpreztorc_content }}
+
+    {%- else %}
+
+{{ prezto_zpreztorc_default_content }}
+
+    {% endif %}
 
 {% endif %}
 {% endfor %}

@@ -1,15 +1,36 @@
 ---
+
 language: python
 python: "2.7"
 
 before_install:
   - sudo apt-get update -qq
-  - sudo apt-get remove --purge zsh
-  - sudo git clone http://github.com/loliee/ansible-zsh ../ansible-zsh
+  - sudo apt-get install zsh
+  - sudo apt-get install ruby rubygems
+  - sudo useradd mtester -m -d /home/mtester -s /bin/bash
+  - sudo chgrp ```id -gn``` /home/mtester
+  - sudo chmod g+s /home/mtester
+  - sudo rm -rf /home/mtester/.zprezto*
+  - sudo rm -f /home/mtester/.zlogin
+  - sudo rm -f /home/mtester/.zlogout
+  - sudo rm -f /home/mtester/.zpreztorc
+  - sudo rm -f /home/mtester/.zprofile
+  - sudo rm -f /home/mtester/.zshenv
+  - umask 002
+  - gem install serverspec
+
 install:
   - pip install ansible
   - "{ echo '[defaults]'; echo 'roles_path = ../'; } >> ansible.cfg"
+  - ansible-galaxy install -r requirements.yml -p ../ --force
 
 script:
-  - ansible-playbook -i ./tests/inventory ./tests/main.yml --syntax-check
-  - ansible-playbook -i ./tests/inventory ./tests/main.yml --connection=local --sudo
+  # Check machine pre-test state.
+  - rspec tests/spec/before_test_spec.rb
+
+  # Check syntax
+  - ansible-playbook -i tests/inventory ./tests/playbooks/main.yml --syntax-check --list-tasks
+
+  # Check role
+  - ansible-playbook -i ./tests/inventory tests/playbooks/main.yml --connection=local --sudo
+  - rspec tests/spec/main_spec.rb

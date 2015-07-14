@@ -17,7 +17,28 @@ Requires git 2.0.0+ and ZSH 5.0.0+.
 
 ## Dependencies
 
+- Role [ansible-git](https://github.com/loliee/ansible-git)
 - Role [ansible-zsh](https://github.com/loliee/ansible-zsh)
+
+To install:
+
+add in your `requirements.yml`
+
+```yaml
+- src: loliee.zsh
+  name: ansible-zsh
+  path: ../
+
+- src: loliee.git
+  name: ansible-git
+  path: ../
+```
+
+Run following command to install packages in `roles/` directory.
+
+```bash
+ansible-galaxy install -r requirements.yml -p roles --force
+```
 
 ## Role Variables
 
